@@ -3,9 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@slack/client": "^4.8.0",
+    "cors": "^2.8.4",
+    "express": "^4.16.4",
+    "fast-csv": "^2.4.1",
+    "lodash": "^4.17.11",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
-    "react-scripts": "2.1.1"
+    "react-scripts": "2.1.1",
+    "whatwg-fetch": "^3.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
