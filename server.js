@@ -1,15 +1,12 @@
 const express = require('express');
 const { WebClient } = require('@slack/client');
-const web = new WebClient('SLACK_ACCESS_TOKEN');
+const web = new WebClient('xoxp-80321462342-457809939091-464794034962-f0b0a3019847c87e71832b6ac80badba');
 
 const cors = require('cors');
-
 const fs = require('fs');
 const csv = require('fast-csv');
-
 const _ = require('lodash');
-
-const ws = fs.createWriteStream('my.csv');
+const ws = fs.createWriteStream('export.csv');
 
 
 const app = express();

@@ -2,17 +2,9 @@ import React, { Component } from 'react';
 
 import { WebClient } from '@slack/client'
 
-import logo from './logo.svg';
 import './App.css';
 
-const fs = require('fs');
-const csv = require('fast-csv');
-
-const _ = require('lodash');
-
-
-const web = new WebClient('SLACK_ACCESS_TOKEN');
-
+const web = new WebClient('xoxp-80321462342-457809939091-464794034962-f0b0a3019847c87e71832b6ac80badba');
 
 
 class App extends Component {
@@ -63,8 +55,7 @@ class App extends Component {
 
 
 
-
-  render() {
+    render() {
     const displayChannelOptions = this.state.channels.map(channel => {
             return channel.map(el =>
                 (
@@ -75,13 +66,33 @@ class App extends Component {
     )
 
     return (
-        <form onSubmit={this.handleSubmit}>
-            <label>Select the Slack Channel</label>
-            <select value={this.state.value} onChange={this.handleChange}>
-                {displayChannelOptions}
-            </select>
-            <input type="submit" value="Submit"/>
-        </form>
+        <section>
+            <div className="container">
+                <div className="display">
+                    <h3 className="display-text">Slack Email Retriever</h3>
+
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="row">
+                            <div className="display-info">
+                                <label>Select The Slack Channel:</label>
+                                <select value={this.state.value} onChange={this.handleChange}>
+                                    {displayChannelOptions}
+                                </select>
+                            </div>
+
+
+                        </div>
+                        <div className="row">
+                                <input type="submit" value="Submit"/>
+                        </div>
+                    </form>
+                    <a href="../export.csv" download="export.csv">Download</a>
+                </div>
+
+            </div>
+        </section>
+
+
     );
   }
 
@@ -92,10 +103,9 @@ class App extends Component {
             headers: {
                 "Access-Control-Allow-Origin": "*",
             }
-        }).then(function(data) {
-            console.log(data);
         })
   }
+
 
 }
 
