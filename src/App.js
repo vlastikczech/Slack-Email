@@ -4,7 +4,7 @@ import { WebClient } from '@slack/client'
 
 import './App.css';
 
-const web = new WebClient('xoxp-80321462342-457809939091-464794034962-f0b0a3019847c87e71832b6ac80badba');
+const web = new WebClient(process.env.SLACK_ACCESS_TOKEN);
 
 
 class App extends Component {
