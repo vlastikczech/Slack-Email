@@ -4,6 +4,7 @@ import { WebClient } from '@slack/client'
 
 import './App.css';
 
+import logo from './assets/images/full-color-mark.png';
 
 const web = new WebClient(process.env.SLACK_ACCESS_TOKEN = '');
 
