@@ -1,6 +1,6 @@
 const express = require('express');
 const { WebClient } = require('@slack/client');
-const web = new WebClient(process.env.SLACK_ACCESS_TOKEN);
+const web = new WebClient('');
 
 const cors = require('cors');
 const fs = require('fs');

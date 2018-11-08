@@ -4,7 +4,8 @@ import { WebClient } from '@slack/client'
 
 import './App.css';
 
-const web = new WebClient(process.env.SLACK_ACCESS_TOKEN);
+
+const web = new WebClient(process.env.SLACK_ACCESS_TOKEN = '');
 
 
 class App extends Component {
@@ -56,47 +57,49 @@ class App extends Component {
 
 
     render() {
-    const displayChannelOptions = this.state.channels.map(channel => {
-            return channel.map(el =>
-                (
-                    <option value={el.channelNumber}>{el.channelName}</option>
+        const displayChannelOptions = this.state.channels.map(channel => {
+                return channel.map(el =>
+                    (
+                        <option value={el.channelNumber}>{el.channelName}</option>
+                    )
                 )
-            )
-        }
-    )
+            }
+        )
 
-    return (
-        <section>
-            <div className="container">
-                <div className="display">
-                    <h3 className="display-text">Slack Email Retriever</h3>
+        return (
+            <section className="section-display">
+                <div className="container">
+                    <div className="display">
+                        {/* <h3 className="display-text">Slack Email Retriever</h3> */}
+                        <img src={logo} alt="logo" id="logo"/>
 
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="row">
-                            <div className="display-info">
-                                <label>Select The Slack Channel:</label>
-                                <select value={this.state.value} onChange={this.handleChange}>
-                                    {displayChannelOptions}
-                                </select>
+                        <h3>Slack <br/>Email Retriever</h3>
+
+                        <form onSubmit={this.handleSubmit}>
+                            <div className="row">
+                                <div className="display-info">
+                                    <p className="display-text">Download your cvs file in one click to extract your channel user's email.</p>
+                                    <select className="custom-select" value={this.state.value} onChange={this.handleChange}>
+                                        {displayChannelOptions}
+                                    </select>
+                                </div>
+
+
                             </div>
+                            <div className="row">
+                                <input type="submit" className="btn" value="Download File"/>
+                            </div>
+                        </form>
+                    </div>
 
-
-                        </div>
-                        <div className="row">
-                                <input type="submit" value="Submit"/>
-                        </div>
-                    </form>
-                    <a href="../export.csv" download="export.csv">Download</a>
                 </div>
-
-            </div>
-        </section>
+            </section>
 
 
-    );
-  }
+        );
+    }
 
-  async fetchEmails(channelName) {
+    async fetchEmails(channelName) {
         const url = `http://localhost:3001/${channelName}`;
         const response = await fetch(url, {
             method: 'GET',
@@ -104,7 +107,7 @@ class App extends Component {
                 "Access-Control-Allow-Origin": "*",
             }
         })
-  }
+    }
 
 
 }
