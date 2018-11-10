@@ -93,7 +93,7 @@ class App extends Component {
                 <div className="display-info">
                     <p className="display-text">Enter your legacy slack token. Don't have one? <a href="https://api.slack.com/custom-integrations/legacy-tokens">token</a></p>
                 </div>
-                <input type="text" value={this.state.token} onChange={this.handleTokenChange} />
+                <input type="text" value={this.state.token} onChange={this.handleTokenChange} placeholder="Enter your legacy slack token." />
                 <input type="submit" className="btn" value="Submit"/>
             </div>
 
