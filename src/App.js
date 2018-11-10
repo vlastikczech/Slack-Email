@@ -4,9 +4,9 @@ import { WebClient } from '@slack/client'
 
 import './App.css';
 
+
 import logo from './assets/images/full-color-mark.png';
 
-const web = new WebClient(process.env.SLACK_ACCESS_TOKEN = '');
 
 
 class App extends Component {
@@ -16,19 +16,24 @@ class App extends Component {
         this.state = {
             channels: [],
             value: '',
+            tokenValue: '',
+            slackAccess: false
         }
 
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleChange = this.handleChange.bind(this)
+        this.handleTokenChange = this.handleTokenChange.bind(this)
+        this.handleTokenSubmit = this.handleTokenSubmit.bind(this)
     }
 
-    componentDidMount() {
+    async renderToken() {
+        const web = new WebClient(this.state.tokenValue);
         let Array = [];
 
         let channel = web.channels.list()
             .then((res) => {
                 res.channels.map(el => {
-                    Array.push( {channelName: el.name, channelNumber: el.id} )
+                    Array.push({channelName: el.name, channelNumber: el.id})
                 });
                 return Array
             })
@@ -51,7 +56,23 @@ class App extends Component {
 
     handleSubmit = (event) => {
         console.log(this.state.value);
-        this.fetchEmails(this.state.value);
+        this.fetchEmails(this.state.value, this.state.tokenValue);
+        event.preventDefault();
+    }
+
+    handleTokenChange = (event) => {
+
+        this.setState ({
+            tokenValue: event.target.value
+        });
+    }
+
+    handleTokenSubmit = (event) => {
+
+        this.setState ({
+            slackAccess: true
+        })
+        this.renderToken()
         event.preventDefault();
     }
 
@@ -67,30 +88,44 @@ class App extends Component {
             }
         )
 
+        let displayChannel =   <form onSubmit={this.handleTokenSubmit}>
+            <div className="row">
+                <div className="display-info">
+                    <p className="display-text">Enter your legacy slack token. Don't have one? <a href="https://api.slack.com/custom-integrations/legacy-tokens">token</a></p>
+                </div>
+                <input type="text" value={this.state.token} onChange={this.handleTokenChange} />
+                <input type="submit" className="btn" value="Submit"/>
+            </div>
+
+        </form>
+
+        if (this.state.slackAccess) {
+            displayChannel =  <form onSubmit={this.handleSubmit}>
+                <div className="row">
+                    <div className="display-info">
+                        <p className="display-text">Download your cvs file in one click to extract your channel user's email.</p>
+                        <select className="custom-select" value={this.state.value} onChange={this.handleChange}>
+                            {displayChannelOptions}
+                        </select>
+                    </div>
+
+
+                </div>
+                <div className="row">
+                    <input type="submit" className="btn" value="Download File"/>
+                </div>
+            </form>
+        }
+
         return (
             <section className="section-display">
                 <div className="container">
                     <div className="display">
-                        {/* <h3 className="display-text">Slack Email Retriever</h3> */}
                         <img src={logo} alt="logo" id="logo"/>
 
                         <h3>Slack <br/>Email Retriever</h3>
 
-                        <form onSubmit={this.handleSubmit}>
-                            <div className="row">
-                                <div className="display-info">
-                                    <p className="display-text">Download your cvs file in one click to extract your channel user's email.</p>
-                                    <select className="custom-select" value={this.state.value} onChange={this.handleChange}>
-                                        {displayChannelOptions}
-                                    </select>
-                                </div>
-
-
-                            </div>
-                            <div className="row">
-                                <input type="submit" className="btn" value="Download File"/>
-                            </div>
-                        </form>
+                        {displayChannel}
                     </div>
 
                 </div>
@@ -100,14 +135,9 @@ class App extends Component {
         );
     }
 
-    async fetchEmails(channelName) {
-        const url = `http://localhost:3001/${channelName}`;
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-            }
-        })
+    async fetchEmails(channelName, tokenValue) {
+        const url = `http://localhost:3001/${channelName}/${tokenValue}`;
+        window.location.href = url
     }
 
 

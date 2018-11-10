@@ -1,21 +1,20 @@
 const express = require('express');
+
 const { WebClient } = require('@slack/client');
-const web = new WebClient('');
 
 const cors = require('cors');
-const fs = require('fs');
 const csv = require('fast-csv');
 const _ = require('lodash');
-const ws = fs.createWriteStream('export.csv');
-
 
 const app = express();
 const port = 3001
-
 app.use(cors());
 
-app.get('/:channelName', function(req, res) {
+app.get('/:channelName/:tokenValue', function(req, res) {
     let channelName = req.params.channelName
+    const token = req.params.tokenValue
+
+    const web = new WebClient(token)
 
     const users = []
     const userData = web.channels.info({
@@ -24,15 +23,11 @@ app.get('/:channelName', function(req, res) {
         .then((res) => {
             res.channel.members.map(el => {
                 users.push(el);
-                console.log(el);
-
             })
             return users;
         })
-    res.send(userData);
 
-
-    const array = []
+    const object = {}
     Promise.all([userData]).then(function(values) {
         values.map(el => {
             return Promise.all(el.map(function(user) {
@@ -40,29 +35,27 @@ app.get('/:channelName', function(req, res) {
                     user: user
                 })
                     .then((res) => {
-                        array.push({
-                            name: res.user.profile.real_name,
-                            email: res.user.profile.email
-                        })
-                        console.log(array);
-                        return array;
+                        object[res.user.profile.email] = res.user.profile.real_name
+                        console.log(object);
                     })
                 ])
             }))
-            .then(function(data) {
-                var newData = _.uniqBy(data, 'name:');
-                newData.map(el => {
-                    el.map(el => {
-                        csv.
-                        write((el), {
-                            headers: true
-                        })
-                            .pipe(ws)
+                .then(function() {
+                    const array = [['email', 'name']]
+                    Object.keys(object).map(email => {
+                        array.push([email, object[email]])
                     })
+                    const string = array.map(user => {
+                        return user.join(',')
+                    }).join('\n')
+
+                    res.set('Content-Type', 'text/csv')
+                    res.set('Content-Disposition', `attachment;filename="${channelName}.csv"`)
+                    res.send(string)
                 })
-            })
         })
     })
 })
+
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
