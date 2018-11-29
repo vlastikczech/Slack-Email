@@ -57,8 +57,8 @@ input[type="submit"] {
   margin: 0 auto;
   margin-top: 10px;
   width: 80%;
-  height: 6vh;
-  padding: 5px 0;
+  height: 60px;
+  padding: 10px 0;
   background-color: #00b070;
   color: white;
   font-weight: 500;
@@ -71,8 +71,8 @@ input[type="text"] {
   margin: 0 auto;
   margin-top: 10px;
   width: 80% !important;
-  height: 6vh;
-  padding: 5px 0;
+  height: 60px;
+  padding: 10px 0;
   color: black;
 }
 
